@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitTask;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -26,12 +27,13 @@ public final class BossBarManager {
     private BossBar.Overlay overlay;
 
     private final Map<UUID, BossBar> bossBars = new HashMap<>();
+    private BukkitTask updateTask;
 
     public BossBarManager(@NotNull JavaPlugin plugin) {
         this.plugin = plugin;
-        loadConfig();
 
-        Bukkit.getScheduler().runTaskTimer(plugin, this::updateBossBar, period, period);
+        loadConfig();
+        startUpdateTask();
     }
 
     /**
@@ -39,6 +41,7 @@ public final class BossBarManager {
      */
     public void loadConfig() {
         plugin.saveDefaultConfig();
+        plugin.reloadConfig();
         final FileConfiguration config = plugin.getConfig();
 
         period = config.getInt("Period", 20);
@@ -46,6 +49,20 @@ public final class BossBarManager {
         progress = (float) config.getDouble("Progress", 1.0);
         color = BossBar.Color.NAMES.valueOr(config.getString("Color", "red"), BossBar.Color.RED);
         overlay = BossBar.Overlay.NAMES.valueOr(config.getString("Overlay", "progress"), BossBar.Overlay.PROGRESS);
+    }
+
+    /**
+     * Start or restart the update task.
+     */
+    public void startUpdateTask() {
+        if (updateTask != null)
+            updateTask.cancel();
+
+        // No update if period is zero or negative
+        if (period <= 0)
+            return;
+
+        updateTask = Bukkit.getScheduler().runTaskTimer(plugin, this::updateBossBar, period, period);
     }
 
     /**

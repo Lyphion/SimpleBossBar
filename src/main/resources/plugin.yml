@@ -8,3 +8,14 @@ author: Lyphion
 description: Simple Boss Bar plugin
 
 softdepend: [PlaceholderAPI]
+
+permissions:
+  bossbar.admin:
+    description: Admin permission
+    default: op
+
+commands:
+  reloadbossbar:
+    description: Reload the config
+    usage: Please use /reloadbossbar
+    permission: bossbar.admin

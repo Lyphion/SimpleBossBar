@@ -1,4 +1,4 @@
-# Update period in ticks
+# Update period in ticks (use 0 to disable update)
 Update: 20
 
 # Displayed text in the Boss Bar (Supports formating via MiniMessage and PlaceholderAPI)

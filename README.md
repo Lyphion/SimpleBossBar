@@ -7,3 +7,4 @@ This Boss Bar plugin enables the display of information via the Boss Bar. It sup
 ## Configuration
 
 The Boss Bar can be configured using the `config.yml`. There are options for the update period, text and styling options of the Boss Bar.
+The configuration can be reloaded with `reloadbossbar`.
