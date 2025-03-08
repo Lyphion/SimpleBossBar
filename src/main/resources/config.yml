@@ -1,0 +1,14 @@
+# Update period in ticks
+Update: 20
+
+# Displayed text in the Boss Bar (Supports formating via MiniMessage and PlaceholderAPI)
+Text: <rainbow>This a colorful Boss Bar</rainbow>
+
+# Progress of the Boss Bar (Between 0.0 and 1.0)
+Progress: 1.0
+
+# Color of the Boss Bar (Options: pink, blue, red, green, yellow, purple, white)
+Color: red
+
+# Overlay for segmentation (Options: progress, notched_6, notched_10, notched_12, notched_20)
+Overlay: progress
