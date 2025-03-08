@@ -2,6 +2,7 @@ package dev.lyphium.bossbar;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,6 +12,11 @@ public final class PlayerListener implements Listener {
 
     public PlayerListener(BossBarManager bossBarManager) {
         this.bossBarManager = bossBarManager;
+    }
+
+    @EventHandler
+    private void onPlayerJoin(@NotNull PlayerJoinEvent event) {
+        bossBarManager.createBossBar(event.getPlayer());
     }
 
     @EventHandler

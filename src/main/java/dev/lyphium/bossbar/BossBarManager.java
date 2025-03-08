@@ -75,10 +75,8 @@ public final class BossBarManager {
      */
     public void updateBossBar() {
         for (final Player player : Bukkit.getOnlinePlayers()) {
-            if (!bossBars.containsKey(player.getUniqueId())) {
-                createBossBar(player);
+            if (!bossBars.containsKey(player.getUniqueId()))
                 continue;
-            }
 
             final Component text = formatBossBarText(player);
             final BossBar bossBar = bossBars.get(player.getUniqueId());
