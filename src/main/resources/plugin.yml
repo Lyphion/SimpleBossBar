@@ -1,0 +1,10 @@
+name: SimpleBossBar
+version: '${version}'
+main: dev.lyphium.bossbar.SimpleBossBar
+api-version: '1.21'
+prefix: EggHunt
+load: POSTWORLD
+author: Lyphion
+description: Simple Boss Bar plugin
+
+softdepend: [PlaceholderAPI]
