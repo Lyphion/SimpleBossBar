@@ -1,7 +1,10 @@
 # Update period in ticks (use 0 to disable update)
 Update: 20
 
-# Displayed text in the Boss Bar (Supports formating via MiniMessage and PlaceholderAPI)
+# Run Update in the background
+Asynchronously: true
+
+# Displayed text in the Boss Bar (Supports formatting via MiniMessage and PlaceholderAPI)
 Text: <rainbow>This a colorful Boss Bar</rainbow>
 
 # Progress of the Boss Bar (Between 0.0 and 1.0)

@@ -13,10 +13,12 @@ public final class SimpleBossBar extends JavaPlugin {
     public void onEnable() {
         bossBarManager = new BossBarManager(this);
 
-        Bukkit.getOnlinePlayers().forEach(p -> bossBarManager.createBossBar(p));
+        Bukkit.getOnlinePlayers().stream()
+                .filter(p -> bossBarManager.showingBossBar(p))
+                .forEach(p -> bossBarManager.createBossBar(p));
         getServer().getPluginManager().registerEvents(new PlayerListener(bossBarManager), this);
 
-        new ReloadBossBarCommand(bossBarManager).register(Objects.requireNonNull(getCommand("reloadbossbar")));
+        new BossBarCommand(bossBarManager).register(Objects.requireNonNull(getCommand("bossbar")));
 
         getLogger().info("Plugin activated");
     }

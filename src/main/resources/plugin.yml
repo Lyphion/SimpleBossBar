@@ -15,7 +15,6 @@ permissions:
     default: op
 
 commands:
-  reloadbossbar:
-    description: Reload the config
-    usage: Please use /reloadbossbar
-    permission: bossbar.admin
+  bossbar:
+    description: Manage the boss bar
+    usage: Please use /bossbar <toggle/reload>
