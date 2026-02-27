@@ -11,7 +11,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitTask;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +32,7 @@ public final class BossBarManager {
 
     private int period;
     private boolean async;
+    private boolean papi;
 
     private String text;
     private float progress;
@@ -42,9 +43,10 @@ public final class BossBarManager {
     private final Map<UUID, Tuple<String, Component>> cachedMessages = new ConcurrentHashMap<>();
     private final Set<UUID> hiddenBossBars = new HashSet<>();
 
+    @Nullable
     private BukkitTask saveTask, updateTask;
 
-    public BossBarManager(@NotNull JavaPlugin plugin) {
+    public BossBarManager(JavaPlugin plugin) {
         this.plugin = plugin;
 
         loadConfig();
@@ -58,6 +60,7 @@ public final class BossBarManager {
         plugin.saveDefaultConfig();
         plugin.reloadConfig();
         final FileConfiguration config = plugin.getConfig();
+        papi = Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null;
 
         period = config.getInt("Period", 20);
         async = config.getBoolean("Asynchronously", true);
@@ -99,7 +102,7 @@ public final class BossBarManager {
      * @param player Player to change the state
      * @param show   New state of the Boss Bar for the player.
      */
-    public void setShowBossBar(@NotNull Player player, boolean show) {
+    public void setShowBossBar(Player player, boolean show) {
         // Check if new state is equal old -> skip
         if (show != hiddenBossBars.contains(player.getUniqueId()))
             return;
@@ -137,7 +140,7 @@ public final class BossBarManager {
      * @param player Player to check
      * @return {@code true} if Boss Bar is shown.
      */
-    public boolean showingBossBar(@NotNull Player player) {
+    public boolean showingBossBar(Player player) {
         return !hiddenBossBars.contains(player.getUniqueId());
     }
 
@@ -146,7 +149,7 @@ public final class BossBarManager {
      *
      * @param player Player for whom a Boss Bar should be created.
      */
-    public void createBossBar(@NotNull Player player) {
+    public void createBossBar(Player player) {
         final Component text = formatBossBarText(player);
         final BossBar bossBar = BossBar.bossBar(text, progress, color, overlay);
         bossBars.put(player.getUniqueId(), bossBar);
@@ -158,7 +161,7 @@ public final class BossBarManager {
      *
      * @param player Player for whom a Boss Bar should be removed.
      */
-    public void removeBossBar(@NotNull Player player) {
+    public void removeBossBar(Player player) {
         final BossBar bossBar = bossBars.remove(player.getUniqueId());
         cachedMessages.remove(player.getUniqueId());
 
@@ -171,10 +174,10 @@ public final class BossBarManager {
      */
     public void updateBossBar() {
         for (final Player player : Bukkit.getOnlinePlayers()) {
-            final BossBar bossBar = bossBars.getOrDefault(player.getUniqueId(), null);
-            if (bossBar == null)
+            if (!bossBars.containsKey(player.getUniqueId()))
                 continue;
 
+            final BossBar bossBar = bossBars.get(player.getUniqueId());
             bossBar.name(formatBossBarText(player));
         }
     }
@@ -185,14 +188,16 @@ public final class BossBarManager {
      * @param player Player for whom the Boss Bar to format.
      * @return Formated Boss Bar.
      */
-    private @NotNull Component formatBossBarText(@NotNull Player player) {
+    private Component formatBossBarText(Player player) {
         String text = this.text;
-        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null)
+        if (papi)
             text = PlaceholderAPI.setPlaceholders(player, text);
 
-        final Tuple<String, Component> tuple = cachedMessages.getOrDefault(player.getUniqueId(), null);
-        if (tuple != null && tuple.getA().equals(text))
-            return tuple.getB();
+        if (cachedMessages.containsKey(player.getUniqueId())) {
+            final Tuple<String, Component> tuple = cachedMessages.get(player.getUniqueId());
+            if (tuple.getA().equals(text))
+                return tuple.getB();
+        }
 
         final Component message = MiniMessage.miniMessage().deserialize(text);
         cachedMessages.put(player.getUniqueId(), new Tuple<>(text, message));

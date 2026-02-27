@@ -5,7 +5,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.jetbrains.annotations.NotNull;
 
 public final class PlayerListener implements Listener {
 
@@ -16,7 +15,7 @@ public final class PlayerListener implements Listener {
     }
 
     @EventHandler
-    private void onPlayerJoin(@NotNull PlayerJoinEvent event) {
+    private void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
 
         if (bossBarManager.showingBossBar(player))
@@ -24,7 +23,7 @@ public final class PlayerListener implements Listener {
     }
 
     @EventHandler
-    private void onPlayerQuit(@NotNull PlayerQuitEvent event) {
+    private void onPlayerQuit(PlayerQuitEvent event) {
         bossBarManager.removeBossBar(event.getPlayer());
     }
 }
