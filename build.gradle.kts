@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "dev.lyphium"
-version = "1.1.0"
+version = "1.1.1"
 description = "Simple Boss Bar plugin"
 
 repositories {
@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    paperweight.paperDevBundle("1.21.10-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.21.11-R0.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.12.2")
 
     compileOnly("org.projectlombok:lombok:1.18.42")
@@ -48,7 +48,7 @@ tasks {
 paperPluginYaml {
     main = "dev.lyphium.bossbar.SimpleBossBar"
     load = BukkitPluginYaml.PluginLoadOrder.POSTWORLD
-    apiVersion = "1.21.10"
+    apiVersion = "1.21.11"
     author = "Lyphion"
     website = "https://github.com/Lyphion/SimpleBossBar"
     dependencies.server.register("PlaceholderAPI") {
