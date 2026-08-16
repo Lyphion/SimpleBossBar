@@ -46,8 +46,9 @@ public final class BossBarCommand {
                         .requires(s -> s.getExecutor() instanceof Player)
                         .executes(ctx -> {
                             final Player player = (Player) ctx.getSource().getExecutor();
-                            if (player == null)
+                            if (player == null) {
                                 return Command.SINGLE_SUCCESS;
+                            }
 
                             // Toggle Boss Bar for player
                             bossBarManager.setShowBossBar(player, !bossBarManager.showingBossBar(player));

@@ -4,7 +4,7 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.minecraft.util.Tuple;
+import org.apache.commons.lang3.tuple.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -40,7 +40,7 @@ public final class BossBarManager {
     private BossBar.Overlay overlay;
 
     private final Map<UUID, BossBar> bossBars = new ConcurrentHashMap<>();
-    private final Map<UUID, Tuple<String, Component>> cachedMessages = new ConcurrentHashMap<>();
+    private final Map<UUID, Pair<String, Component>> cachedMessages = new ConcurrentHashMap<>();
     private final Set<UUID> hiddenBossBars = new HashSet<>();
 
     @Nullable
@@ -80,12 +80,14 @@ public final class BossBarManager {
      * Start or restart the update task.
      */
     public void startUpdateTask() {
-        if (updateTask != null)
+        if (updateTask != null) {
             updateTask.cancel();
+        }
 
         // No update if period is zero or negative
-        if (period <= 0)
+        if (period <= 0) {
             return;
+        }
 
         if (async) {
             // Run Update task in the background
@@ -104,8 +106,9 @@ public final class BossBarManager {
      */
     public void setShowBossBar(Player player, boolean show) {
         // Check if new state is equal old -> skip
-        if (show != hiddenBossBars.contains(player.getUniqueId()))
+        if (show != hiddenBossBars.contains(player.getUniqueId())) {
             return;
+        }
 
         // Update hidden list and change Boss Bar status
         if (show) {
@@ -117,8 +120,9 @@ public final class BossBarManager {
         }
 
         // Cancel scheduled task
-        if (saveTask != null)
+        if (saveTask != null) {
             saveTask.cancel();
+        }
 
         // Delay saving, if multiple edits are made
         // Run saving asynchronously
@@ -165,8 +169,9 @@ public final class BossBarManager {
         final BossBar bossBar = bossBars.remove(player.getUniqueId());
         cachedMessages.remove(player.getUniqueId());
 
-        if (bossBar != null)
+        if (bossBar != null) {
             player.hideBossBar(bossBar);
+        }
     }
 
     /**
@@ -174,8 +179,9 @@ public final class BossBarManager {
      */
     public void updateBossBar() {
         for (final Player player : Bukkit.getOnlinePlayers()) {
-            if (!bossBars.containsKey(player.getUniqueId()))
+            if (!bossBars.containsKey(player.getUniqueId())) {
                 continue;
+            }
 
             final BossBar bossBar = bossBars.get(player.getUniqueId());
             bossBar.name(formatBossBarText(player));
@@ -190,17 +196,19 @@ public final class BossBarManager {
      */
     private Component formatBossBarText(Player player) {
         String text = this.text;
-        if (papi)
+        if (papi) {
             text = PlaceholderAPI.setPlaceholders(player, text);
+        }
 
         if (cachedMessages.containsKey(player.getUniqueId())) {
-            final Tuple<String, Component> tuple = cachedMessages.get(player.getUniqueId());
-            if (tuple.getA().equals(text))
-                return tuple.getB();
+            final Pair<String, Component> tuple = cachedMessages.get(player.getUniqueId());
+            if (tuple.getLeft().equals(text)) {
+                return tuple.getRight();
+            }
         }
 
         final Component message = MiniMessage.miniMessage().deserialize(text);
-        cachedMessages.put(player.getUniqueId(), new Tuple<>(text, message));
+        cachedMessages.put(player.getUniqueId(), Pair.of(text, message));
         return message;
     }
 }

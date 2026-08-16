@@ -18,8 +18,9 @@ public final class PlayerListener implements Listener {
     private void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
 
-        if (bossBarManager.showingBossBar(player))
+        if (bossBarManager.showingBossBar(player)) {
             bossBarManager.createBossBar(player);
+        }
     }
 
     @EventHandler
