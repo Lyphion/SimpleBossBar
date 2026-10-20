@@ -4,12 +4,12 @@ import xyz.jpenilla.resourcefactory.paper.PaperPluginYaml
 
 plugins {
     id("java")
-    id("io.papermc.paperweight.userdev") version "2.0.0-beta.21"
-    id("xyz.jpenilla.resource-factory-paper-convention") version "1.3.1"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.24"
+    id("xyz.jpenilla.resource-factory-paper-convention") version "1.4.0"
 }
 
 group = "dev.lyphium"
-version = "1.1.2"
+version = "1.1.3"
 description = "Simple Boss Bar plugin"
 
 repositories {
@@ -21,14 +21,14 @@ repositories {
 }
 
 dependencies {
-    paperweight.paperDevBundle("26.2.build.+")
+    paperweight.paperDevBundle("26.3.build.+")
     compileOnly("me.clip:placeholderapi:2.12.3")
 
-    compileOnly("org.projectlombok:lombok:1.18.46")
-    annotationProcessor("org.projectlombok:lombok:1.18.46")
+    compileOnly("org.projectlombok:lombok:1.18.48")
+    annotationProcessor("org.projectlombok:lombok:1.18.48")
 
-    testCompileOnly("org.projectlombok:lombok:1.18.46")
-    testAnnotationProcessor("org.projectlombok:lombok:1.18.46")
+    testCompileOnly("org.projectlombok:lombok:1.18.48")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.48")
 }
 
 java {
@@ -45,7 +45,7 @@ tasks {
 paperPluginYaml {
     main = "dev.lyphium.bossbar.SimpleBossBar"
     load = BukkitPluginYaml.PluginLoadOrder.POSTWORLD
-    apiVersion = "26.2"
+    apiVersion = "26.3"
     author = "Lyphion"
     website = "https://github.com/Lyphion/SimpleBossBar"
     dependencies.server.register("PlaceholderAPI") {
